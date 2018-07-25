@@ -54,6 +54,7 @@ class Home extends Component {
             reviews={reviews}
             roomPhotoUri={roomPhotoUri}
             profilePhotoUri={profilePhotoUri}
+            navigate={this.props.navigation.navigate}
           />
         );
       }
@@ -90,10 +91,11 @@ class Home extends Component {
       h44,
       borderBottom,
       w100,
-      transparent
+      transparent,
+      p40
     } = commonStyles;
 
-    const { image, p40, mb20, mb40 } = styles;
+    const { image, mb20, mb40 } = styles;
 
     return (
       <ScrollView style={[flex1, bgWhite, p40]}>
@@ -106,7 +108,6 @@ class Home extends Component {
     axios
       .get("https://airbnb-api.now.sh/api/room?city=paris")
       .then(response => {
-        console.log(response.data);
         if (response.data) {
           this.setState({
             data: response.data
@@ -125,9 +126,6 @@ const styles = StyleSheet.create({
   image: {
     width: 80,
     height: 80
-  },
-  p40: {
-    padding: 40
   },
   mb20: {
     marginBottom: 20

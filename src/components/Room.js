@@ -1,26 +1,16 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, Dimensions } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Dimensions,
+  TouchableOpacity
+} from "react-native";
 import commonStyles from "../styles/commonStyles";
 import Rating from "./Rating";
 
 class Room extends Component {
-  state = {
-    imageWidth: 0,
-    imageHeight: 0
-  };
-
-  componentDidMount() {
-    if (this.props.roomPhotoUri) {
-      // To get image proportion
-      Image.getSize(this.props.roomPhotoUri, (width, height) => {
-        let proportion = height / width;
-        let imageWidth = Dimensions.get("window").width - 2 * 40;
-        let imageHeight = Math.ceil(imageWidth * proportion);
-        this.setState({ imageWidth, imageHeight });
-      });
-    }
-  }
-
   render() {
     const {
       row,
@@ -32,42 +22,53 @@ class Room extends Component {
       white,
       opacity8,
       borderBottomBlack,
-      w100
+      w100,
+      cover
     } = commonStyles;
     const {
+      id,
       title,
       price,
       ratingValue,
       reviews,
       roomPhotoUri,
-      profilePhotoUri
+      profilePhotoUri,
+      navigate
     } = this.props;
 
     const { imageProfile, priceStyle, fs16 } = styles;
-    const { imageWidth, imageHeight } = this.state;
+
+    const imageWidth = Dimensions.get("window").width - 2 * 40;
+    const imageHeight = 150;
 
     return (
       <View style={[]}>
-        <View style={[mv20]}>
-          <View>
-            <Image
-              style={[{ width: imageWidth, height: imageHeight }, mb10]}
-              source={{ uri: roomPhotoUri }}
-            />
-            <Text style={[priceStyle, fs40, bgBlack, white, opacity8]}>
-              {price} €
-            </Text>
-          </View>
-          <View style={[row]}>
-            <View style={flex1}>
-              <Text style={[fs16]} numberOfLines={1}>
-                {title}
+        <TouchableOpacity onPress={() => navigate("RoomScreen", { id })}>
+          <View style={[mv20]}>
+            <View>
+              <Image
+                style={[
+                  { width: imageWidth, height: imageHeight },
+                  cover,
+                  mb10
+                ]}
+                source={{ uri: roomPhotoUri }}
+              />
+              <Text style={[priceStyle, fs40, bgBlack, white, opacity8]}>
+                {price} €
               </Text>
-              <Rating ratingValue={ratingValue} reviews={reviews} />
             </View>
-            <Image style={[imageProfile]} source={{ uri: profilePhotoUri }} />
+            <View style={[row]}>
+              <View style={flex1}>
+                <Text style={[fs16]} numberOfLines={1}>
+                  {title}
+                </Text>
+                <Rating ratingValue={ratingValue} reviews={reviews} />
+              </View>
+              <Image style={[imageProfile]} source={{ uri: profilePhotoUri }} />
+            </View>
           </View>
-        </View>
+        </TouchableOpacity>
         <View style={[borderBottomBlack, w100]} />
       </View>
     );

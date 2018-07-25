@@ -46,7 +46,6 @@ class Login extends Component {
         config
       )
       .then(response => {
-        console.log(response.data);
         if (response.data) {
           navigate("HomeScreen");
         }
@@ -87,10 +86,11 @@ class Login extends Component {
       h44,
       borderBottomWhite,
       w100,
-      transparent
+      transparent,
+      p40
     } = commonStyles;
 
-    const { image, p40, mb20, mb40 } = styles;
+    const { image, mb20, mb40 } = styles;
     const { error } = this.state;
 
     return (
@@ -134,9 +134,6 @@ const styles = StyleSheet.create({
   image: {
     width: 80,
     height: 80
-  },
-  p40: {
-    padding: 40
   },
   mb20: {
     marginBottom: 20

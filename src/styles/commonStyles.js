@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
+  /* Color */
   white: {
     color: "white"
   },
@@ -10,6 +11,8 @@ export default StyleSheet.create({
   pink: {
     color: "#FF5862"
   },
+  /* Background color */
+
   bgPink: {
     backgroundColor: "#FF5862"
   },
@@ -22,41 +25,15 @@ export default StyleSheet.create({
   bgBlack: {
     backgroundColor: "black"
   },
+  bgGreen: {
+    backgroundColor: "green"
+  },
+  /* Flex */
   row: {
     flexDirection: "row"
   },
   flex1: {
     flex: 1
-  },
-  bgGreen: {
-    backgroundColor: "green"
-  },
-  mb5: {
-    marginBottom: 5
-  },
-  mr5: {
-    marginRight: 5
-  },
-  mb10: {
-    marginBottom: 10
-  },
-  p5: {
-    padding: 5
-  },
-  bold: {
-    fontWeight: "bold"
-  },
-  rounded22: {
-    borderRadius: 22
-  },
-  rounded10: {
-    borderRadius: 10
-  },
-  rounded5: {
-    borderRadius: 5
-  },
-  cover: {
-    resizeMode: "cover"
   },
   spaceBetween: {
     justifyContent: "space-between"
@@ -67,11 +44,28 @@ export default StyleSheet.create({
   alignItemsCenter: {
     alignItems: "center"
   },
-  textCenter: {
-    textAlign: "center"
+  /* Margin */
+  mb5: {
+    marginBottom: 5
+  },
+  mr5: {
+    marginRight: 5
+  },
+  mb10: {
+    marginBottom: 10
   },
   mv20: {
     marginVertical: 20
+  },
+  /* Padding */
+  p5: {
+    padding: 5
+  },
+  p20: {
+    padding: 20
+  },
+  p40: {
+    padding: 40
   },
   pv10: {
     paddingVertical: 10
@@ -79,9 +73,25 @@ export default StyleSheet.create({
   ph40: {
     paddingHorizontal: 40
   },
-  h44: {
-    // Taille minimum conseillée pour un boutton, un textinput
-    height: 44
+  /* Fonts */
+  bold: {
+    fontWeight: "bold"
+  },
+  fs40: {
+    fontSize: 40
+  },
+  fs20: {
+    fontSize: 20
+  },
+  /* Border */
+  rounded22: {
+    borderRadius: 22
+  },
+  rounded10: {
+    borderRadius: 10
+  },
+  rounded5: {
+    borderRadius: 5
   },
   borderBottomBlack: {
     borderBottomColor: "black",
@@ -91,14 +101,20 @@ export default StyleSheet.create({
     borderBottomColor: "white",
     borderBottomWidth: 1
   },
+  /* Image */
+  cover: {
+    resizeMode: "cover"
+  },
+  /* Others */
+  textCenter: {
+    textAlign: "center"
+  },
+  h44: {
+    // Button/TextInput recommended minimum size
+    height: 44
+  },
   w100: {
     width: "100%"
-  },
-  fs40: {
-    fontSize: 40
-  },
-  fs20: {
-    fontSize: 20
   },
   opacity8: {
     opacity: 0.8
