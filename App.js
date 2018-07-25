@@ -4,14 +4,14 @@ import Home from "./src/containers/Home";
 import Room from "./src/containers/RoomDetail";
 
 const App = createStackNavigator({
+  LoginScreen: {
+    screen: Login
+  },
   HomeScreen: {
     screen: Home
   },
   RoomScreen: {
     screen: Room
-  },
-  LoginScreen: {
-    screen: Login
   }
 });
 

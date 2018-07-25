@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, Dimensions } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Dimensions,
+  ActivityIndicator
+} from "react-native";
 import commonStyles from "../styles/commonStyles";
 import Rating from "../components/Rating";
 import axios from "axios";
@@ -14,6 +21,7 @@ class Room extends Component {
   };
 
   state = {
+    loading: true,
     title: "",
     description: "",
     ratingValue: 0,
@@ -74,7 +82,8 @@ class Room extends Component {
             roomPhotoUri,
             profilePhotoUri,
             roomPhotoUri,
-            profilePhotoUri
+            profilePhotoUri,
+            loading: false
           });
         }
       })
@@ -92,7 +101,8 @@ class Room extends Component {
       bgBlack,
       white,
       opacity8,
-      p20
+      p20,
+      justifyContentCenter
     } = commonStyles;
     const {
       title,
@@ -103,38 +113,49 @@ class Room extends Component {
       roomPhotoUri,
       profilePhotoUri,
       imageWidth,
-      imageHeight
+      imageHeight,
+      loading
     } = this.state;
 
     const { imageProfile, priceStyle, fs16 } = styles;
 
-    return (
-      <View>
+    if (loading) {
+      return (
+        <ActivityIndicator
+          style={[flex1, justifyContentCenter]}
+          size="large"
+          color="#FF5862"
+        />
+      );
+    } else {
+      return (
         <View>
-          <Image
-            style={[{ width: imageWidth, height: imageHeight }, mb10]}
-            source={{ uri: roomPhotoUri }}
-          />
-          <Text style={[priceStyle, fs40, bgBlack, white, opacity8]}>
-            {price} €
-          </Text>
-        </View>
-        <View style={[p20]}>
-          <View style={[row]}>
-            <View style={flex1}>
-              <Text style={[fs16]} numberOfLines={1}>
-                {title}
-              </Text>
-              <Rating ratingValue={ratingValue} reviews={reviews} />
-            </View>
-            <Image style={[imageProfile]} source={{ uri: profilePhotoUri }} />
+          <View>
+            <Image
+              style={[{ width: imageWidth, height: imageHeight }, mb10]}
+              source={{ uri: roomPhotoUri }}
+            />
+            <Text style={[priceStyle, fs40, bgBlack, white, opacity8]}>
+              {price} €
+            </Text>
           </View>
-          <Text style={[fs16]} numberOfLines={3}>
-            {description}
-          </Text>
+          <View style={[p20]}>
+            <View style={[row, mb10]}>
+              <View style={flex1}>
+                <Text style={[fs16]} numberOfLines={1}>
+                  {title}
+                </Text>
+                <Rating ratingValue={ratingValue} reviews={reviews} />
+              </View>
+              <Image style={[imageProfile]} source={{ uri: profilePhotoUri }} />
+            </View>
+            <Text style={[fs16]} numberOfLines={3}>
+              {description}
+            </Text>
+          </View>
         </View>
-      </View>
-    );
+      );
+    }
   }
 }
 
@@ -150,9 +171,8 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   priceStyle: {
-    position: "relative",
+    position: "absolute",
     width: 120,
-    top: -80,
-    marginBottom: -40
+    bottom: 30
   }
 });

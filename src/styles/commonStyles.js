@@ -54,6 +54,12 @@ export default StyleSheet.create({
   mb10: {
     marginBottom: 10
   },
+  mb20: {
+    marginBottom: 20
+  },
+  mb40: {
+    marginBottom: 40
+  },
   mv20: {
     marginVertical: 20
   },

@@ -87,9 +87,8 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   priceStyle: {
-    position: "relative",
+    position: "absolute",
     width: 120,
-    top: -80,
-    marginBottom: -40
+    bottom: 20
   }
 });

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { FlatList } from "react-native";
+import { FlatList, ActivityIndicator } from "react-native";
 import commonStyles from "../styles/commonStyles";
 import axios from "axios";
 import Room from "../components/Room";
@@ -14,11 +14,11 @@ class Home extends Component {
   };
 
   state = {
+    loading: true,
     data: null
   };
 
   renderRoom = room => {
-    console.log(room);
     let { _id, title, photos, user, ratingValue, price, reviews } = room;
     let roomPhotoUri = "";
     if (photos && photos.length) {
@@ -49,10 +49,18 @@ class Home extends Component {
   };
 
   render() {
-    const { bgWhite, flex1, p40 } = commonStyles;
-    const { data } = this.state;
+    const { bgWhite, flex1, p40, justifyContentCenter } = commonStyles;
+    const { data, loading } = this.state;
 
-    if (data && data.rooms) {
+    if (loading) {
+      return (
+        <ActivityIndicator
+          style={[flex1, justifyContentCenter]}
+          size="large"
+          color="#FF5862"
+        />
+      );
+    } else {
       return (
         <FlatList
           style={[bgWhite, flex1, p40]}
@@ -61,8 +69,6 @@ class Home extends Component {
           keyExtractor={(room, index) => room._id}
         />
       );
-    } else {
-      return null;
     }
   }
 
@@ -72,7 +78,8 @@ class Home extends Component {
       .then(response => {
         if (response.data) {
           this.setState({
-            data: response.data
+            data: response.data,
+            loading: false
           });
         }
       })

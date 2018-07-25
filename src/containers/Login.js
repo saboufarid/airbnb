@@ -1,26 +1,70 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import {
-  View,
+  KeyboardAvoidingView,
   Text,
-  StyleSheet,
-  Image,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator,
+  Animated,
+  Keyboard
 } from "react-native";
 import commonStyles from "../styles/commonStyles";
 import axios from "axios";
 
 class Login extends Component {
   static navigationOptions = {
-    headerStyle: {
-      backgroundColor: "#FF5862"
-    }
+    headerStyle: { display: "none" }
   };
 
+  constructor(props) {
+    super(props);
+    this.imageSize = new Animated.Value(80);
+    this.mb = new Animated.Value(40);
+  }
+
   state = {
-    email: "",
-    password: "",
-    error: ""
+    email: "arno@airbnb-api.com",
+    password: "password01",
+    error: "",
+    loading: false
+  };
+
+  componentWillMount() {
+    this.keyboardWillShowSub = Keyboard.addListener(
+      "keyboardWillShow",
+      this.keyboardWillShow
+    );
+    this.keyboardWillHideSub = Keyboard.addListener(
+      "keyboardWillHide",
+      this.keyboardWillHide
+    );
+  }
+
+  componentWillUnmount() {
+    this.keyboardWillShowSub.remove();
+    this.keyboardWillHideSub.remove();
+  }
+
+  keyboardWillShow = event => {
+    Animated.timing(this.imageSize, {
+      duration: event.duration,
+      toValue: 40
+    }).start();
+    Animated.timing(this.mb, {
+      duration: event.duration,
+      toValue: 20
+    }).start();
+  };
+
+  keyboardWillHide = event => {
+    Animated.timing(this.imageSize, {
+      duration: event.duration,
+      toValue: 80
+    }).start();
+    Animated.timing(this.mb, {
+      duration: event.duration,
+      toValue: 40
+    }).start();
   };
 
   onChange = (key, value) => {
@@ -36,109 +80,144 @@ class Login extends Component {
       headers: { "Content-Type": "application/json" }
     };
 
-    axios
-      .post(
-        "https://airbnb-api.now.sh/api/user/log_in/",
-        {
-          email,
-          password
-        },
-        config
-      )
-      .then(response => {
-        if (response.data) {
-          navigate("HomeScreen");
-        }
-      })
-      .catch(err => {
-        this.setState({
-          error: err.message
-        });
-      });
+    this.setState(
+      {
+        loading: true
+      },
+      () => {
+        axios
+          .post(
+            "https://airbnb-api.now.sh/api/user/log_in/",
+            {
+              email,
+              password
+            },
+            config
+          )
+          .then(response => {
+            this.setState(
+              {
+                loading: false
+              },
+              () => {
+                if (response.data) {
+                  navigate("HomeScreen");
+                }
+              }
+            );
+          })
+          .catch(err => {
+            this.setState({
+              loading: false,
+              error: err.message
+            });
+          });
+      }
+    );
   };
+
+  renderButtonContent() {
+    const { pink, fs20, bold, mr5 } = commonStyles;
+    if (this.state.loading) {
+      return (
+        <Fragment>
+          <Text style={[pink, fs20, bold, mr5]}>Login</Text>
+          <ActivityIndicator size="small" color="#FF5862" />
+        </Fragment>
+      );
+    }
+    return <Text style={[pink, fs20, bold]}>Login</Text>;
+  }
 
   render() {
     const {
       white,
-      pink,
       red,
       bgPink,
       bgWhite,
-      row,
       flex1,
-      bgGreen,
-      mb5,
-      mb10,
-      p5,
       bold,
       rounded22,
-      rounded10,
-      rounded5,
-      cover,
-      spaceBetween,
       alignItemsCenter,
       justifyContentCenter,
       textCenter,
-      pv10,
       ph40,
       fs20,
       fs40,
       h44,
       borderBottomWhite,
       w100,
-      transparent,
-      p40
+      p40,
+      row,
+      mb40,
+      mb20
     } = commonStyles;
 
-    const { image, mb20, mb40 } = styles;
-    const { error } = this.state;
+    const { error, loading } = this.state;
 
     return (
-      <View style={[flex1, bgPink, p40, alignItemsCenter]}>
-        <Image style={[image, mb20]} source={require("../images/house.png")} />
-        <Text style={[white, fs40, mb20]}>Welcome</Text>
+      <KeyboardAvoidingView
+        style={[
+          flex1,
+          bgPink,
+          p40,
+          alignItemsCenter,
+          justifyContentCenter,
+          mb20
+        ]}
+        behavior="padding"
+      >
+        <Animated.Image
+          style={[
+            {
+              width: this.imageSize,
+              height: this.imageSize,
+              marginBottom: this.mb
+            }
+          ]}
+          source={require("../images/house.png")}
+        />
+        <Text style={[white, fs40, mb40]}>Welcome</Text>
         <TextInput
           returnKeyType={"next"}
           placeholder={"email"}
           keyboardType={"email-address"}
-          style={[w100, h44, fs20, borderBottomWhite, mb20, white]}
-          value={this.state.name}
+          style={[w100, h44, fs20, borderBottomWhite, mb40, white]}
+          value={this.state.email}
           onChangeText={text => this.onChange("email", text)}
         />
         <TextInput
           returnKeyType={"next"}
           placeholder={"password"}
           secureTextEntry={true}
-          style={[w100, h44, fs20, borderBottomWhite, mb40, white]}
+          style={[w100, h44, fs20, borderBottomWhite, mb20, white]}
           value={this.state.password}
           onChangeText={text => this.onChange("password", text)}
         />
-        <TouchableOpacity
-          style={[bgWhite, h44, rounded22, justifyContentCenter, mb40]}
-          onPress={this.onLogin}
+        <Text
+          style={[red, error ? bgWhite : bgPink, bold, w100, textCenter, mb20]}
         >
-          <Text style={[pink, fs20, bold, ph40]}>Login</Text>
-        </TouchableOpacity>
-
-        <Text style={[red, error ? bgWhite : bgPink, bold, w100, textCenter]}>
           {error}
         </Text>
-      </View>
+        <TouchableOpacity
+          style={[
+            row,
+            bgWhite,
+            h44,
+            rounded22,
+            justifyContentCenter,
+            alignItemsCenter,
+            mb40,
+            ph40
+          ]}
+          disabled={loading}
+          onPress={this.onLogin}
+        >
+          {this.renderButtonContent()}
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
     );
   }
 }
 
 export default Login;
-
-const styles = StyleSheet.create({
-  image: {
-    width: 80,
-    height: 80
-  },
-  mb20: {
-    marginBottom: 20
-  },
-  mb40: {
-    marginBottom: 40
-  }
-});
