@@ -1,9 +1,9 @@
-import { StackNavigator } from "react-navigation";
+import { createStackNavigator } from "react-navigation";
 import Login from "./src/containers/Login";
 import Home from "./src/containers/Home";
 import Room from "./src/containers/RoomDetail";
 
-const App = StackNavigator({
+const App = createStackNavigator({
   HomeScreen: {
     screen: Home
   },

@@ -1,13 +1,5 @@
 import React, { Component } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Image,
-  TextInput,
-  TouchableOpacity
-} from "react-native";
+import { FlatList } from "react-native";
 import commonStyles from "../styles/commonStyles";
 import axios from "axios";
 import Room from "../components/Room";
@@ -22,86 +14,56 @@ class Home extends Component {
   };
 
   state = {
-    data: ""
+    data: null
   };
 
-  renderRooms = () => {
-    let components = [];
-    const { data } = this.state;
-    if (data.rooms) {
-      for (let room of data.rooms) {
-        let { _id, title, photos, user, ratingValue, price, reviews } = room;
-        let roomPhotoUri = "";
-        if (photos && photos.length) {
-          roomPhotoUri = photos[0];
-        }
-        let profilePhotoUri = "";
-        if (
-          user &&
-          user.account &&
-          user.account.photos &&
-          user.account.photos.length
-        ) {
-          profilePhotoUri = user.account.photos[0];
-        }
-        components.push(
-          <Room
-            key={_id}
-            id={_id}
-            title={title}
-            ratingValue={ratingValue}
-            price={price}
-            reviews={reviews}
-            roomPhotoUri={roomPhotoUri}
-            profilePhotoUri={profilePhotoUri}
-            navigate={this.props.navigation.navigate}
-          />
-        );
-      }
+  renderRoom = room => {
+    console.log(room);
+    let { _id, title, photos, user, ratingValue, price, reviews } = room;
+    let roomPhotoUri = "";
+    if (photos && photos.length) {
+      roomPhotoUri = photos[0];
     }
-    return components;
+    let profilePhotoUri = "";
+    if (
+      user &&
+      user.account &&
+      user.account.photos &&
+      user.account.photos.length
+    ) {
+      profilePhotoUri = user.account.photos[0];
+    }
+
+    return (
+      <Room
+        id={_id}
+        title={title}
+        ratingValue={ratingValue}
+        price={price}
+        reviews={reviews}
+        roomPhotoUri={roomPhotoUri}
+        profilePhotoUri={profilePhotoUri}
+        navigate={this.props.navigation.navigate}
+      />
+    );
   };
 
   render() {
-    const {
-      white,
-      pink,
-      red,
-      bgPink,
-      bgWhite,
-      row,
-      flex1,
-      bgGreen,
-      mb5,
-      mb10,
-      p5,
-      bold,
-      rounded22,
-      rounded10,
-      rounded5,
-      cover,
-      spaceBetween,
-      alignItemsCenter,
-      justifyContentCenter,
-      textCenter,
-      pv10,
-      ph40,
-      fs20,
-      fs40,
-      h44,
-      borderBottom,
-      w100,
-      transparent,
-      p40
-    } = commonStyles;
+    const { bgWhite, flex1, p40 } = commonStyles;
+    const { data } = this.state;
 
-    const { image, mb20, mb40 } = styles;
-
-    return (
-      <ScrollView style={[flex1, bgWhite, p40]}>
-        {this.renderRooms()}
-      </ScrollView>
-    );
+    if (data && data.rooms) {
+      return (
+        <FlatList
+          style={[bgWhite, flex1, p40]}
+          data={data.rooms}
+          renderItem={({ item }) => this.renderRoom(item)}
+          keyExtractor={(room, index) => room._id}
+        />
+      );
+    } else {
+      return null;
+    }
   }
 
   componentDidMount() {
@@ -121,16 +83,3 @@ class Home extends Component {
 }
 
 export default Home;
-
-const styles = StyleSheet.create({
-  image: {
-    width: 80,
-    height: 80
-  },
-  mb20: {
-    marginBottom: 20
-  },
-  mb40: {
-    marginBottom: 40
-  }
-});
