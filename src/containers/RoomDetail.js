@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import MapView from "react-native-maps";
 import {
   View,
   Text,
@@ -30,7 +31,9 @@ class Room extends Component {
     roomPhotoUri: "",
     profilePhotoUri: "",
     imageWidth: 0,
-    imageHeight: 0
+    imageHeight: 0,
+    longitude: 0,
+    latitude: 0
   };
 
   componentDidMount() {
@@ -46,7 +49,8 @@ class Room extends Component {
             user,
             ratingValue,
             price,
-            reviews
+            reviews,
+            loc
           } = response.data;
           let roomPhotoUri = "";
           if (photos && photos.length) {
@@ -72,7 +76,6 @@ class Room extends Component {
               this.setState({ imageWidth, imageHeight });
             });
           }
-
           this.setState({
             title,
             description,
@@ -83,6 +86,8 @@ class Room extends Component {
             profilePhotoUri,
             roomPhotoUri,
             profilePhotoUri,
+            longitude: loc[0],
+            latitude: loc[1],
             loading: false
           });
         }
@@ -114,6 +119,8 @@ class Room extends Component {
       profilePhotoUri,
       imageWidth,
       imageHeight,
+      longitude,
+      latitude,
       loading
     } = this.state;
 
@@ -128,6 +135,8 @@ class Room extends Component {
         />
       );
     } else {
+      console.log(typeof longitude);
+      console.log(typeof latitude);
       return (
         <View>
           <View>
@@ -149,9 +158,26 @@ class Room extends Component {
               </View>
               <Image style={[imageProfile]} source={{ uri: profilePhotoUri }} />
             </View>
-            <Text style={[fs16]} numberOfLines={3}>
+            <Text style={[fs16, mb10]} numberOfLines={3}>
               {description}
             </Text>
+            <MapView
+              style={[{ width: imageWidth - 40, height: 150 }]}
+              initialRegion={{
+                latitude: latitude,
+                longitude: longitude,
+                latitudeDelta: 0.02,
+                longitudeDelta: 0.01
+              }}
+            >
+              <MapView.Marker
+                coordinate={{
+                  latitude: latitude,
+                  longitude: longitude
+                }}
+                title={title}
+              />
+            </MapView>
           </View>
         </View>
       );

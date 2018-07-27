@@ -5,38 +5,37 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
-  Animated,
   Keyboard
 } from "react-native";
 import commonStyles from "../styles/commonStyles";
 import axios from "axios";
+import Icon from "react-native-animated-icons";
 
 class Login extends Component {
   static navigationOptions = {
     headerStyle: { display: "none" }
   };
 
-  constructor(props) {
-    super(props);
-    this.imageSize = new Animated.Value(80);
-    this.mb = new Animated.Value(40);
-  }
-
   state = {
     email: "arno@airbnb-api.com",
     password: "password01",
+    // email: "titi@titi.fr",
+    // password: "titi",
+    iconSize: 80,
     error: "",
     loading: false
   };
 
   componentWillMount() {
-    this.keyboardWillShowSub = Keyboard.addListener(
-      "keyboardWillShow",
-      this.keyboardWillShow
+    this.keyboardWillShowSub = Keyboard.addListener("keyboardWillShow", () =>
+      this.setState({
+        iconSize: 40
+      })
     );
-    this.keyboardWillHideSub = Keyboard.addListener(
-      "keyboardWillHide",
-      this.keyboardWillHide
+    this.keyboardWillHideSub = Keyboard.addListener("keyboardWillHide", () =>
+      this.setState({
+        iconSize: 80
+      })
     );
   }
 
@@ -44,28 +43,6 @@ class Login extends Component {
     this.keyboardWillShowSub.remove();
     this.keyboardWillHideSub.remove();
   }
-
-  keyboardWillShow = event => {
-    Animated.timing(this.imageSize, {
-      duration: event.duration,
-      toValue: 40
-    }).start();
-    Animated.timing(this.mb, {
-      duration: event.duration,
-      toValue: 20
-    }).start();
-  };
-
-  keyboardWillHide = event => {
-    Animated.timing(this.imageSize, {
-      duration: event.duration,
-      toValue: 80
-    }).start();
-    Animated.timing(this.mb, {
-      duration: event.duration,
-      toValue: 40
-    }).start();
-  };
 
   onChange = (key, value) => {
     this.setState({
@@ -88,6 +65,7 @@ class Login extends Component {
         axios
           .post(
             "https://airbnb-api.now.sh/api/user/log_in/",
+            // "https://jklc.herokuapp.com/api/auth",
             {
               email,
               password
@@ -153,7 +131,7 @@ class Login extends Component {
       mb20
     } = commonStyles;
 
-    const { error, loading } = this.state;
+    const { error, loading, iconSize } = this.state;
 
     return (
       <KeyboardAvoidingView
@@ -167,16 +145,14 @@ class Login extends Component {
         ]}
         behavior="padding"
       >
-        <Animated.Image
-          style={[
-            {
-              width: this.imageSize,
-              height: this.imageSize,
-              marginBottom: this.mb
-            }
-          ]}
-          source={require("../images/house.png")}
+        <Icon
+          name="home"
+          fontFamily="Ionicons"
+          fontSize={iconSize}
+          animation
+          color="white"
         />
+
         <Text style={[white, fs40, mb40]}>Welcome</Text>
         <TextInput
           returnKeyType={"next"}

@@ -29,8 +29,7 @@
     "react/no-direct-mutation-state": "error",
     "react/prop-types": "warn",
     "react/react-in-jsx-scope": "error",
-    "react/require-render-return": "error",
-    "react-native/no-unused-styles": "error"
+    "react/require-render-return": "error"
   },
   "plugins": ["react", "react-native"]
 }
