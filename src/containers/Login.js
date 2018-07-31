@@ -19,8 +19,6 @@ class Login extends Component {
   state = {
     email: "arno@airbnb-api.com",
     password: "password01",
-    // email: "titi@titi.fr",
-    // password: "titi",
     iconSize: 80,
     error: "",
     loading: false
@@ -65,7 +63,6 @@ class Login extends Component {
         axios
           .post(
             "https://airbnb-api.now.sh/api/user/log_in/",
-            // "https://jklc.herokuapp.com/api/auth",
             {
               email,
               password

@@ -135,8 +135,6 @@ class Room extends Component {
         />
       );
     } else {
-      console.log(typeof longitude);
-      console.log(typeof latitude);
       return (
         <View>
           <View>
